@@ -40,8 +40,6 @@ Notes:
 2. This assignment made only for rtCamp Solutions Pvt. Ltd.
 3. You can download upto 3200 tweets and xml download 25 tweets
 
-Twitter Timeline Demo link
--------------------------------------------------------------------------------------------
-https://jatin-kaklotar.000webhostapp.com/twitter_demo/
+
 
 
