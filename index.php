@@ -47,7 +47,7 @@ if (!isset($_SESSION['access_token']))
                 <li>You will be asked to connect using your twitter account</li>
                 <li>Once authenticated, you will show latest 10 tweets form your "home" timeline in slide show.</li>
                 <li>Below jQuery-slideshow you will display list 10 followers(10 random followers).</li>
-                <li>In search followers box you starts typing, your followers will start showing up.</li>
+                <li>In search followers box you starts typing, your followers will start showing up(5000 current followers search).</li>
                 <li>When you will click on a follower name, 10 tweets from that follower's user-timeline will be displayed in same jQuery-slider </li>
                 <li>You can download upto 3200 tweets using  Download button</li>
             </ul>
@@ -234,15 +234,17 @@ $_SESSION['my_profile'] = $session_account_info;
                         $("#search-box").css("background", "#FFF");
 //                        $("#msg-box").show();
                     },
-
-                    beforeSend: function () {
-                        $("#msg-box").show();
+                    beforeSend: function () {            
+                        timer = setTimeout(function()
+                            {
+                                $("#msg-box").show();
+                            },
+                            5000);
                     },
                     complete: function () {
+                        clearTimeout(timer);
                         $("#msg-box").hide();
                     }
-
-
                 });
             }
             else {
