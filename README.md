@@ -16,7 +16,8 @@ Part-1: User Timeline:
 Part-2: Followers Timeline:
 
 1. Below jQuery-slideshow (in step#4 from part-1), display list 10 followers (you can take any 10 random followers).
-2. When user will click on a follower name, 10 tweets from that follower's user-timeline will be displayed in same jQuery-slider, without page refresh (use AJAX).
+2  Also, display a search followers box. Add auto-suggest support. That means as soon as user starts typing, his followers will start showing up(upto 5000 followers you can search).
+3. When user will click on a follower name, 10 tweets from that follower's user-timeline will be displayed in same jQuery-slider, without page refresh (use AJAX).
 
 Part-3: Download Tweets
 
@@ -24,7 +25,7 @@ Part-3: Download Tweets
 2.  Download can be performed in one of the following formats i.e. You choose the format you want. It would act as an advantage if you give the option to download the tweets in all the following formats:
     csv, xls, google-spreadhseet, pdf, xml and json formats.
 3.  For Google-spreadsheet export feature, your app-user must have Google account. Your app should ask for permission to create spreadsheet on user’s Google-Drive.
-4.  Once user clicks download button (after choosing option) all tweets for logged in users should be downloaded.
+4.  Once user clicks download button (after choosing option) all tweets for logged in users should be downloaded(up to 3200 tweets you can download).
 
 -----------------------------------------------------------------------------------------
 
@@ -39,6 +40,7 @@ Notes:
 1. This assignment requirement internet connection
 2. This assignment made only for rtCamp Solutions Pvt. Ltd.
 3. You can download upto 3200 tweets all option except only  xml download limit 25 tweets
+4. You can search upto current 5000 followers 
 
 
 Demo Link
