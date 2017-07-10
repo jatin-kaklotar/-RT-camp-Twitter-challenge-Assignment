@@ -45,6 +45,5 @@ Notes:
 
 Demo Link
 -----------------------------------------------
-https://jatin-kaklotar.000webhostapp.com/twitter_demo
-
+https://jarinbuilds.000webhostapp.com/twitter_demo/
 
