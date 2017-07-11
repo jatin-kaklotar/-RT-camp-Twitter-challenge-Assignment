@@ -45,5 +45,4 @@ Notes:
 
 Demo Link
 -----------------------------------------------
-https://jarinbuilds.000webhostapp.com/twitter_demo/
 
