@@ -22,7 +22,8 @@ if (!isset($_SESSION['access_token'])) {
         $followerstweet = $connection->get("statuses/user_timeline", array('screen_name' => $follower_id1, 'count' => 10));
         $my_array = array();
         foreach ($followerstweet as $key => $ftweet) {
-            $my_array[$key]['text'] = $ftweet->text;
+            $string_text =$ftweet->text;
+            $my_array[$key]['text']=preg_replace("~[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]~","<a target='_blank' href=\"\\0\">\\0</a>",$string_text);
             if (isset($ftweet->entities->media[0]->media_url)) {
                 $image_f = '<img src="' . $ftweet->entities->media[0]->media_url . '" height="150" width="150" /> &nbsp;';
                 $my_array[$key]['images'] = $image_f;
@@ -37,7 +38,8 @@ if (!isset($_SESSION['access_token'])) {
         $my_array = array();
         foreach ($followerstweet as $key => $ftweet) {
 
-            $my_array[$key]['text'] = $ftweet->text;
+            $string_text =$ftweet->text;
+            $my_array[$key]['text']=preg_replace("~[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]~","<a target='_blank' href=\"\\0\">\\0</a>",$string_text);
             if (isset($ftweet->entities->media[0]->media_url)) {
                 $image_f = '<img src="' . $ftweet->entities->media[0]->media_url . '" height="150" width="150" /> &nbsp;';
                 $my_array[$key]['images'] = $image_f;
