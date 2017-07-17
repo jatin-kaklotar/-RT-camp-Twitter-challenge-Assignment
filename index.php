@@ -5,14 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twitter App</title>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
     <link rel="stylesheet" href="lib/css/style.css">
     <script src="lib/js/index.js"></script>
-
 </head>
 <body>
 
@@ -55,7 +52,6 @@ if (!isset($_SESSION['access_token']))
             <a href="<?php echo $url; ?>">
                 <button type="button" class="btn btn-primary">Twitter Login</button>
             </a>
-
         </div>
 
     </div>
@@ -67,15 +63,10 @@ else
 $access_token = $_SESSION['access_token'];
 $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
 
-
 $user = $connection->get("account/verify_credentials");
 $session_account_info = array('screen_name' => $user->screen_name, 'followers' => $user->followers_count);
 $_SESSION['my_profile'] = $session_account_info;
-
-
 ?>
-
-
 <nav class="navbar navbar-inverse  navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -90,8 +81,7 @@ $_SESSION['my_profile'] = $session_account_info;
             <ul class="nav navbar-nav">
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" data-toggle="modal" data-target="#myModal" class="download_tweet"><span
-                                class="glyphicon glyphicon-download-alt"></span> Download</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#myModal" class="download_tweet"><span class="glyphicon glyphicon-download-alt"></span> Download</a></li>
                 <li><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
         </div>
@@ -101,7 +91,6 @@ $_SESSION['my_profile'] = $session_account_info;
 
 <div class="container-fluid" style="margin-top:46px">
     <div class="col-md-12 col-sm-12 col-xs-12">
-
         <div id="slider">
             <a href="#" class="control_next">>></a>
             <a href="#" class="control_prev"><<</a>
@@ -113,19 +102,10 @@ $_SESSION['my_profile'] = $session_account_info;
     </div>
 
 </div>
-
 <br>
-
 <div class="container-fluid">
-
-    <!--    <div class="col-md-12 ">-->
-    <!---->
-    <!--    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Download Tweets</button>-->
-    <!--        </div>-->
-    <!-- Modal -->
     <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">
-
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -143,9 +123,8 @@ $_SESSION['my_profile'] = $session_account_info;
                             <option value="xls_try.php">Xls</option>
                             <option value="xml_try.php">Xml</option>
                         </select>
-                        <div class="download_msg" style="display: none">Wait few seconds for loading tweets</div>
+                        <span class="download_msg" style="display: none">Wait few seconds for loading tweets</span>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -162,17 +141,13 @@ $_SESSION['my_profile'] = $session_account_info;
 <script>
     $(document).ready(function () {
 
-
         $('.btnfollowertwitt').click(function () {
-
             var followerID = $(this).val();
-
             $.ajax({
                 type: 'get',
                 url: 'get_tweets.php', //Here you will fetch records
                 data: 'followerID=' + followerID, //Pass $id
                 dataType: 'json',
-
                 success: function (result) {
 
                     var htmld = "";
@@ -206,10 +181,7 @@ $_SESSION['my_profile'] = $session_account_info;
                 $.each(result['display_array'], function (index, data) {
                     htmld += '<li>' + data["text"] + '<br>' + data["images"] + '</li>';
                 });
-
-
                 $("#div66").html(htmld);
-
             }
         });
 
@@ -232,7 +204,6 @@ $_SESSION['my_profile'] = $session_account_info;
                         $("#suggesstion-box").html(data);
 
                         $("#search-box").css("background", "#FFF");
-//                        $("#msg-box").show();
                     },
                     beforeSend: function () {            
                         timer = setTimeout(function()
@@ -313,8 +284,6 @@ $_SESSION['my_profile'] = $session_account_info;
                 else {
                     alert("something went wrong please try again");
                 }
-
-
             }
         });
 
@@ -324,29 +293,27 @@ $_SESSION['my_profile'] = $session_account_info;
 
 <br><br>
 <div class="container-fluid">
-    <div class="col-md-12 col-sm-12">
-        <div class="frmSearch">
+    <div class="col-md-10 col-md-offset-2 col-sm-12" >
+        <div class="frmSearch col-md-9 col-md-offset-3 col-sm-12" style="padding-left: 43px">
             <input type="text" id="search-box" placeholder="Enter Follower Name"/>
             <div id="msg-box" style="display: none;">Wait few seconds....</div>
             <div id="suggesstion-box"></div>
+            <br><br>
         </div>
-
+        <div class="col-md-12 col-sm-12">
         <?php
         $followerslist = $connection->get("followers/list", array('count' => 10));
-
         foreach ($followerslist->users as $follwers_random) {
-            echo "<br/><br/><img src='$follwers_random->profile_image_url_https'>";
+            echo "<div class='col-md-6 col-sm-12'  style='padding-bottom:40px;'>";
+            echo "<img src='$follwers_random->profile_image_url_https'>";
             //  echo " ".$ff->name;
             ?>
-            <button class='btnfollowertwitt btn btn btn-lg '
-                    value='<?php echo $follwers_random->screen_name; ?>'><?php echo $follwers_random->name; ?></button>
+            <button class='btnfollowertwitt btn btn btn-lg' value='<?php echo $follwers_random->screen_name; ?>'><?php echo $follwers_random->name; ?></button>
+            </div>
             <?php
-
-        }
-
-        }
+        }  }
         ?>
-
+        </div>
     </div>
 </div>
 
