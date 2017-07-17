@@ -41,11 +41,8 @@ h1 {
   padding: 0;
   width: 500px;
   height: 300px;
-  /*background: #ccc;*/
   background: white;
-
   text-align: center;
-  /*line-height: 300px;*/
   line-height: 45px;
 
 }
@@ -58,14 +55,13 @@ a.control_prev, a.control_next {
   padding: 4% 3%;
   width: auto;
   height: auto;
-  /*background: #2a2a2a;*/
   background: skyblue;
 
   color: #fff;
   text-decoration: none;
   font-weight: 600;
   font-size: 18px;
-  opacity: 0.8;
+  opacity: 0.6;
   cursor: pointer;
 }
 
@@ -90,15 +86,14 @@ a.control_next {
   font-size: 18px;
 }
 
- /*navebar css*/
-
+/*navebar css*/
 .navbar-inverse {
   background-color: white;
   border-color: grey;
 }
 .navbar-toggle
 {
-background-color: skyblue !important;
+  background-color: skyblue !important;
 }
 .navbar-toggle:hover
 {
@@ -106,51 +101,48 @@ background-color: skyblue !important;
 }
 .navbar-brand
 {
- color: #66757f !important;
+  color: #66757f !important;
 }
-
 .navbar-inverse .navbar-nav > li > a
 {
   color: #66757f;
 }
-
-
 .navbar-inverse .navbar-nav > li > a:hover
 {
   background-color: transparent;
   color: deepskyblue;
 }
-
-
 .navbar-nav > li > a:focus
 {
   background-color: transparent;
   color: deepskyblue !important;
 }
-
-
-
 /*navbar css end*/
 
 
-
 /*serach follower css*/
-
 #suggesstion-box
 {
-  width: 150px;
+  /*height: 100%;*/
+  width: 220px;
+  overflow: hidden;
+  /*moveement css*/
+  height: 200px;
+  z-index: 999;
+  position: absolute;
 }
+
 #followers-list
 {
   float:left;
   list-style:none;
-  margin-top:-3px;
-  padding:0;
-  width:222px;
-  position: absolute;
+  /*width: 119%;*/
+  width: 350px;
+  max-height:222px ;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 200px;
+  padding-right: 77px;
+  margin-left: -38px;
 }
 #followers-list li
 {
@@ -164,30 +156,48 @@ background-color: skyblue !important;
 {
   padding: 10px;border: #a8d4b1 1px solid;border-radius:4px;
 }
-
 /*serch followers css end*/
 
 
 @media only screen and (max-width: 550px) {
 
 
-
-
-
   #slider ul li {
     position: relative;
     display: block;
     float: left;
-    /*margin: 8px;*/
     padding: 0;
     width: 250px;
     height: 300px;
-    /*background: #ccc;*/
     background: white;
-
     text-align: center;
     line-height: 30px;
   }
 
+
+  #followers-list
+  {
+
+
+    float:left;
+    list-style:none;
+    width: 265px;
+    max-height:222px ;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-right: 7px;
+    margin-left: -35px;
+
+
+  }
+
+  #suggesstion-box
+  {
+    height: 100%;
+    width: 220px;
+    overflow: hidden;
+    z-index: 0;
+    position: unset ;
+  }
 
 }
