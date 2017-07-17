@@ -10,7 +10,7 @@ foreach ($menu as $key=>$value)
 }
 
 
-function cleanData(&$str)
+function cleanData($str)
 {
     $str = preg_replace("/\t/", "\\t", $str);
     $str = preg_replace("/\r?\n/", "\\n", $str);
@@ -28,7 +28,7 @@ foreach($data as $row) {
         echo implode("\t", array_keys($row)) . "\r\n";
         $flag = true;
     }
-    array_walk($row, __NAMESPACE__ . '\cleanData');
+    array_walk($row,'cleanData');
     echo implode("\t", array_values($row)) . "\r\n";
 }
 
