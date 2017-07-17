@@ -1,22 +1,6 @@
 <?php
-//https://stackoverflow.com/questions/11545661/php-force-download-json
 session_start();
 $menu = $_SESSION['my'];
-
-
-//$data = [
-//    ["firstname" => "Mary", "lastname" => "Johnson", "age" => 25],
-//    ["firstname" => "Amanda", "lastname" => "Miller", "age" => 18],
-//    ["firstname" => "James", "lastname" => "Brown", "age" => 31],
-//    ["firstname" => "Patricia", "lastname" => "Williams", "age" => 7],
-//    ["firstname" => "Michael", "lastname" => "Davis", "age" => 43],
-//    ["firstname" => "Sarah", "lastname" => "Miller", "age" => 24],
-//    ["firstname" => "Mary", "lastname" => "Johnson", "age" => 25],
-//    ["firstname" => "Patrick", "lastname" => "Miller", "age" => 27]
-//];
-//
-
-
 $data = array();
 foreach ($menu as $key => $value) {
 
