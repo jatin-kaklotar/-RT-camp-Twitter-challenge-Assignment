@@ -1,4 +1,4 @@
-<!--https://www.000webhost.com/members/website/jatin-kaklotar/build-->
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,19 +12,12 @@
     <script src="lib/js/index.js"></script>
 </head>
 <body>
-
 <?php
-session_start();
 require 'autoload.php';
-
-//require "vendor/autoload.php";
 use Abraham\TwitterOAuth\TwitterOAuth;
-
 define('CONSUMER_KEY', 'aeKsT8Hlp7kg0i91SLXK4NB6o'); // add your app consumer key between single quotes
 define('CONSUMER_SECRET', 'QRbDVwhbbJk6CokKdQN3dHjwSzve45V73uH24ZalLaQIM2QDuL'); // add your app consumer secret key between single quotes
 define('OAUTH_CALLBACK', 'https://jatin-kaklotar.000webhostapp.com/twitter_demo/callback.php'); // your app callback URL
-
-
 if (!isset($_SESSION['access_token']))
 {
     $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET);
@@ -32,11 +25,8 @@ if (!isset($_SESSION['access_token']))
     $_SESSION['oauth_token'] = $request_token['oauth_token'];
     $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
     $url = $connection->url('oauth/authorize', array('oauth_token' => $request_token['oauth_token']));
-
     ?>
-
     <div class="container-fluid">
-
         <div class="col-md-12">
             <h2>Hello User this is Twitter Timeline Challenge</h2>
             <ul>
@@ -48,21 +38,17 @@ if (!isset($_SESSION['access_token']))
                 <li>When you will click on a follower name, 10 tweets from that follower's user-timeline will be displayed in same jQuery-slider </li>
                 <li>You can download upto 3200 tweets using  Download button</li>
             </ul>
-
             <a href="<?php echo $url; ?>">
                 <button type="button" class="btn btn-primary">Twitter Login</button>
             </a>
         </div>
-
     </div>
     <?php
 }
 else
 {
-
 $access_token = $_SESSION['access_token'];
 $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
-
 $user = $connection->get("account/verify_credentials");
 $session_account_info = array('screen_name' => $user->screen_name, 'followers' => $user->followers_count);
 $_SESSION['my_profile'] = $session_account_info;
@@ -87,20 +73,16 @@ $_SESSION['my_profile'] = $session_account_info;
         </div>
     </div>
 </nav>
-
-
 <div class="container-fluid" style="margin-top:46px">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div id="slider">
             <a href="#" class="control_next">>></a>
             <a href="#" class="control_prev"><<</a>
             <ul id="div66">
-                <li></li>
-                <li></li>
+                <li></li><li></li>
             </ul>
         </div>
     </div>
-
 </div>
 <br>
 <div class="container-fluid">
@@ -130,31 +112,23 @@ $_SESSION['my_profile'] = $session_account_info;
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </div>
     </div>
-
 </div>
-
-
-
 <script>
     $(document).ready(function () {
-
         $('.btnfollowertwitt').click(function () {
             var followerID = $(this).val();
             $.ajax({
                 type: 'get',
-                url: 'get_tweets.php', //Here you will fetch records
-                data: 'followerID=' + followerID, //Pass $id
+                url: 'get_tweets.php', 
+                data: 'followerID=' + followerID, 
                 dataType: 'json',
                 success: function (result) {
-
                     var htmld = "";
                     $.each(result['display_array'], function (index, data) {
                         htmld += '<li>' + data["text"] + '<br>' + data["images"] + '</li>';
                     });
-
                     var tweet_lenth = result['display_array'].length;
                     if (tweet_lenth == 1) {
                         htmld += '<li></li>';
@@ -162,47 +136,46 @@ $_SESSION['my_profile'] = $session_account_info;
                     else if (tweet_lenth == 0) {
                         htmld += '<li></li><li>No tweets found</li>';
                     }
-
                     $("#div66").html(htmld);
                 }
             });
 
         });
 
-
         $.ajax({
             type: 'get',
-            url: 'get_tweets.php', //Here you will fetch records
-            data: {followerID: null}, //Pass $id
+            url: 'get_tweets.php',
+            data: {followerID: null}, 
             dataType: 'json',
             success: function (result) {
-
                 var htmld = "";
                 $.each(result['display_array'], function (index, data) {
                     htmld += '<li>' + data["text"] + '<br>' + data["images"] + '</li>';
                 });
+                var tweet_lenth = result['display_array'].length;
+                if (tweet_lenth == 1) {
+                    htmld += '<li></li>';
+                }
+                else if (tweet_lenth == 0) {
+                    htmld += '<li></li><li>No tweets found</li>';
+                }
                 $("#div66").html(htmld);
             }
         });
 
     });
-</script>
 
-
-<script>
     $(document).ready(function () {
         $("#search-box").keyup(function () {
-
+            var timer; 
             if ($(this).val() != '') {
                 $.ajax({
                     type: "POST",
                     url: "search_followers.php",
                     data: 'keyword=' + $(this).val(),
-
                     success: function (data) {
                         $("#suggesstion-box").show();
                         $("#suggesstion-box").html(data);
-
                         $("#search-box").css("background", "#FFF");
                     },
                     beforeSend: function () {            
@@ -210,7 +183,7 @@ $_SESSION['my_profile'] = $session_account_info;
                             {
                                 $("#msg-box").show();
                             },
-                            5000);
+                            3000);
                     },
                     complete: function () {
                         clearTimeout(timer);
@@ -220,54 +193,41 @@ $_SESSION['my_profile'] = $session_account_info;
             }
             else {
                 $("#suggesstion-box").empty();
-
             }
-
         });
     });
 
 
     function selectFollowers(val) {
-
         $("#search-box").val(val);
-
         $.ajax({
             type: 'get',
-            url: 'get_tweets.php', //Here you will fetch records
-            data: 'followerID=' + val, //Pass $id
+            url: 'get_tweets.php', 
+            data: 'followerID=' + val, 
             dataType: 'json',
-
             success: function (result) {
-
                 var htmld = "";
                 if (result['display_array'] == '') {
 
                     htmld += '<li></li><li>No tweets found</li>';
                 }
                 else {
-
                     var tweet_lenth = result['display_array'].length;
                     if (tweet_lenth == 1) {
                         htmld += '<li></li>';
                     }
-
                     $.each(result['display_array'], function (index, data) {
                         htmld += '<li>' + data["text"] + '<br>' + data["images"] + '</li>';
                     });
-
                 }
                 $("#div66").html(htmld);
             }
         });
-
         $("#suggesstion-box").hide();
     }
-</script>
 
-
-<script>
+    
     $('.download_tweet').click(function () {
-
         $(".download_select").prop("disabled", true);
         $(".download_msg").show();
         $.ajax({
@@ -275,47 +235,42 @@ $_SESSION['my_profile'] = $session_account_info;
             url: 'my_tweets.php', //Here you will fetch records
             dataType: 'json',
             success: function (result) {
-
                 if (result == 1) {
                     $(".download_select").prop("disabled", false);
                     $(".download_msg").hide();
 
-                }
-                else {
+                }else {
                     alert("something went wrong please try again");
                 }
             }
         });
-
     });
-</script>
-
-
-<br><br>
+</script><br><br>
 <div class="container-fluid">
     <div class="col-md-10 col-md-offset-2 col-sm-12" >
         <div class="frmSearch col-md-9 col-md-offset-3 col-sm-12" style="padding-left: 43px">
-            <input type="text" id="search-box" placeholder="Enter Follower Name"/>
-            <div id="msg-box" style="display: none;">Wait few seconds....</div>
-            <div id="suggesstion-box"></div>
-            <br><br>
+            <input type="text" id="search-box"  placeholder="Enter Follower Name"/>
+            <span id="msg-box" style="display: none;">Wait few seconds....</span>
+            <div id="suggesstion-box"></div><br><br>
         </div>
         <div class="col-md-12 col-sm-12">
         <?php
         $followerslist = $connection->get("followers/list", array('count' => 10));
-        foreach ($followerslist->users as $follwers_random) {
-            echo "<div class='col-md-6 col-sm-12'  style='padding-bottom:40px;'>";
+        if(isset($followerslist->errors[0]->code))
+        {
+            echo "<div class='col-md-10 col-md-offset-2 col-sm-12'>Rate Limit exceesed Please refesh page after some minutes</div>";
+        }else {
+          foreach ($followerslist->users as $follwers_random) {
+            echo "<div class='col-md-6  col-sm-12'  style='padding-bottom:40px;'>";
             echo "<img src='$follwers_random->profile_image_url_https'>";
-            //  echo " ".$ff->name;
-            ?>
-            <button class='btnfollowertwitt btn btn btn-lg' value='<?php echo $follwers_random->screen_name; ?>'><?php echo $follwers_random->name; ?></button>
-            </div>
-            <?php
-        }  }
+            echo "<button class='btnfollowertwitt btn btn btn-lg' value='$follwers_random->screen_name'>$follwers_random->name</button>";
+            echo "</div>";
+            }
+        }
+         }
         ?>
         </div>
     </div>
 </div>
-
 </body>
 </html>
