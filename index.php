@@ -86,6 +86,24 @@ $_SESSION['my_profile'] = $session_account_info;
 </div>
 <br>
 <div class="container-fluid">
+    <div id="myModal1" class="modal fade" role="dialog">
+        <div class="modal-dialog ">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Link for view download file</h4>
+                </div>
+                <div class="modal-body">
+                    <h3><a id="linkinfo" href="#" target="_blank">View File</a></h3>
+                    <p><b>Note</b>:This is excel file upload on drive when you open this link then please select google sheet option for view tweets</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -115,6 +133,18 @@ $_SESSION['my_profile'] = $session_account_info;
         </div>
     </div>
 </div>
+<?php
+if(isset($_GET['linkdrive']))
+{
+    $link_file=$_GET['linkdrive'];
+?>
+    <script type="text/javascript">
+        var link_drive="<?php echo $link_file; ?>";
+        $('#myModal1').modal('show');
+        $("#linkinfo").prop("href", link_drive);
+    </script>
+
+<?php } ?>  
 <script>
     $(document).ready(function () {
         $('.btnfollowertwitt').click(function () {
