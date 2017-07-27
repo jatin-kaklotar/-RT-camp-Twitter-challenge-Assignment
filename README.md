@@ -1,4 +1,3 @@
-# RT-camp-Twitter-challenge-Assignment
 
 
 Twitter Timeline Challenge
