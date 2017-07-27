@@ -1,20 +1,11 @@
 <?php
+session_start();
 require_once 'google-api-php-client/src/Google/Client.php';
 require_once 'google-api-php-client/src/Google/Service/Oauth2.php';
 require_once 'google-api-php-client/src/Google/Service/Drive.php';
-session_start();
+require_once  'google-api-php-client/autoload.php';
 
-header('Content-Type: text/html; charset=utf-8');
 
-// Init the variables
-$driveInfo = "";
-$folderName = "";
-$folderDesc = "";
-
-// Get the file path from the variable
-//$file_tmp_name = $_FILES["file"]["tmp_name"];
-// Get the client Google credentials
-$credentials = $_COOKIE["credentials"];
 
 // Get your app info from JSON downloaded from google dev console
 $json = json_decode(file_get_contents("GoogleClientId.json"), true);
@@ -27,93 +18,41 @@ $client = new Google_Client();
 $client->setClientId($CLIENT_ID);
 $client->setClientSecret($CLIENT_SECRET);
 $client->setRedirectUri($REDIRECT_URI);
-$client->addScope(
-    "https://www.googleapis.com/auth/drive",
-    "https://www.googleapis.com/auth/drive.appfolder");
-
-// Refresh the user token and grand the privileges
-$client->setAccessToken($credentials);
+$client->addScope("https://www.googleapis.com/auth/drive");
 $service = new Google_Service_Drive($client);
 $description = "Uploaded from your very first google drive application!";
-
-// Get the folder metadata
-if (!empty($_POST["folderName"]))
-    $folderName = $_POST["folderName"];
-if (!empty($_POST["folderDesc"]))
-    $folderDesc = $_POST["folderDesc"];
-
-// Call the insert function with parameters listed below
-
 $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 $title = date("Y.m.d.h.i");
 
-
-$driveInfo = insertFile($service, $title, $description, $mimeType, $file_tmp_name, $folderName, $folderDesc);
-
-
-function getFolderExistsCreate($service, $folderName, $folderDesc)
-{
-    // List all user files (and folders) at Drive root
-    $files = $service->files->listFiles();
-    $found = false;
-
-    // Go through each one to see if there is already a folder with the specified name
-    foreach ($files['items'] as $item) {
-        if ($item['title'] == $folderName) {
-            $found = true;
-            return $item['id'];
-            break;
-        }
+if (isset($_GET['code'])) {
+    $client->authenticate($_GET['code']);
+    $_SESSION['upload_token'] = $client->getAccessToken();
+    $redirect = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+    header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
+}
+if (isset($_SESSION['upload_token']) && $_SESSION['upload_token']) {
+    $client->setAccessToken($_SESSION['upload_token']);
+    if ($client->isAccessTokenExpired()) {
+        unset($_SESSION['upload_token']);
     }
-
-    // If not, create one
-    if ($found == false) {
-        $folder = new Google_Service_Drive_DriveFile();
-
-        //Setup the folder to create
-        $folder->setTitle($folderName);
-
-        if (!empty($folderDesc))
-            $folder->setDescription($folderDesc);
-
-        $folder->setMimeType('application/vnd.google-apps.folder');
-
-        //Create the Folder
-        try {
-            $createdFile = $service->files->insert($folder, array(
-                'mimeType' => 'application/vnd.google-apps.folder',
-            ));
-
-            // Return the created folder's id
-            return $createdFile->id;
-        } catch (Exception $e) {
-            print "An error occurred: " . $e->getMessage();
-        }
-    }
+} else {
+    $authUrl = $client->createAuthUrl();
 }
 
+date_default_timezone_set('Asia/Calcutta');
+$mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+$title = date("Y.m.d.h.i.s");
+$driveInfo = insertFile($service, $title, $description, $mimeType);
 
-function insertFile($service, $title, $description, $mimeType, $filename, $folderName, $folderDesc)
+function insertFile($service, $title, $description, $mimeType)
 {
     $file = new Google_Service_Drive_DriveFile();
-
     // Set the metadata
     $file->setTitle($title);
     $file->setDescription($description);
     $file->setMimeType($mimeType);
-
-    // Setup the folder you want the file in, if it is wanted in a folder
-    if (isset($folderName)) {
-        if (!empty($folderName)) {
-            $parent = new Google_Service_Drive_ParentReference();
-            $parent->setId(getFolderExistsCreate($service, $folderName, $folderDesc));
-            $file->setParents(array($parent));
-        }
-    }
     try {
         // Get the contents of the file uploaded
-
-
         $data = fopen('my_tweets' . $title . '.xlsx', 'w');
         $menu = $_SESSION['my'];
         $key = 1;
@@ -122,26 +61,19 @@ function insertFile($service, $title, $description, $mimeType, $filename, $folde
             $key++;
         }
         fclose($data);
-
         $data = file_get_contents('my_tweets' . $title . '.xlsx');
         $createdFile = $service->files->insert($file, array(
             'data' => $data,
-            'mimeType' => 'application/vnd.google-apps.spreadsheet',
+            'mimeType' => $mimeType,
             'uploadType' => 'multipart'
         ));
-
         unlink('my_tweets' . $title . '.xlsx');
-
         // Return a bunch of data including the link to the file we just uploaded
         return $createdFile;
     } catch (Exception $e) {
         print "An error occurred: " . $e->getMessage();
     }
 }
-
-echo "<br>Link to file: " . $driveInfo["alternateLink"];
-
-
-header('location: ../../index.php');
-
+$drive_link=$driveInfo["alternateLink"];
+header('location: ../../index.php?linkdrive='.$drive_link);
 ?>
